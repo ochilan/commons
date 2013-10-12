@@ -337,11 +337,13 @@ inline bool Computation::checkBuildProgram(cl_int err, DevicesPtr devices, Progr
 			default: Log::error("Unknown reason..."); break;
 		}
 		if (err == CL_BUILD_PROGRAM_FAILURE) {
-			std::string log;
 			for (auto& device : *devices) {
+				std::string log;
 				program->getBuildInfo(device, CL_PROGRAM_BUILD_LOG, &log);
+				if (!log.empty()) {
+					Log::error(log);
+				}
 			}
-			Log::error(log);
 		}
 		return false;
 	}
